@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sync_barrier_test"
+        android:text="@string/sync_barrier_test"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_listen_main_looper_message_queue"
+        android:text="@string/listen_main_looper_message_queue"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

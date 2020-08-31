@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HandlerStudy</string>
+    <string name="sync_barrier_test">同步屏障测试</string>
+    <string name="send_sync_message">发送同步消息</string>
+    <string name="send_async_message">发送异步消息</string>
+    <string name="send_sync_barrier_message">发送同步屏障消息</string>
+    <string name="remove_sync_barrier_message">移除同步屏障消息</string>
+    <string name="clear_counter">清除计数</string>
+    <string name="listen_main_looper_message_queue">监听 Main Looper 的消息队列的内容变化</string>
+</resources>

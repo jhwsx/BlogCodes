@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @since 2020/12/28
  */
 @Target(ElementType.FIELD)
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 public @interface BindView {
     @IdRes int value();
 }

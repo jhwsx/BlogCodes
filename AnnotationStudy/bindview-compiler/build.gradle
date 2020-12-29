@@ -17,3 +17,8 @@ dependencies {
     implementation project(':bindview-annotations')
 
 }
+
+// java控制台输出中文乱码
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

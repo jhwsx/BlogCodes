@@ -24,4 +24,17 @@ public class ProcessorConstants {
     public static final String BINDVIEWINTERFACE_FULLNAME = BINDVIEW_API_PACKAGENAME + ".BindViewInterface";
 
     public static final String TARGET_ARGUMENT = "target";
+
+    public static final String BIND_METHOD_NAME = "bind";
+
+    /**
+     * 模块名
+     */
+    public static final String MODULE_NAME = "moduleName";
+
+    /**
+     * 存放生成的 APT 文件的包名
+     */
+    public static final String PACKAGENAME_FOR_APT = "packageNameForAPT";
+
 }

@@ -3,6 +3,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenLocal()
+    }
+
+    ext {
+        packageNameForAPT = "com.example.bindview"
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.4.1"
@@ -16,6 +21,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenLocal()
     }
 }
 

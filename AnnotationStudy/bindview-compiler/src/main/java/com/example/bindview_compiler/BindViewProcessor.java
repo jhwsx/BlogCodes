@@ -3,9 +3,12 @@ package com.example.bindview_compiler;
 import com.example.bindview_annotations.BindView;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,14 +16,17 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -39,6 +45,8 @@ import static com.example.bindview_compiler.ProcessorConstants.TARGET_ARGUMENT;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 // 指定注解处理器支持处理的注解
 @SupportedAnnotationTypes({ProcessorConstants.BINDVIEW_FULLNAME})
+
+@SupportedOptions({ProcessorConstants.MODULE_NAME, ProcessorConstants.PACKAGENAME_FOR_APT})
 public class BindViewProcessor extends AbstractProcessor {
 
     /**
@@ -63,12 +71,23 @@ public class BindViewProcessor extends AbstractProcessor {
      */
     private Map<TypeElement, List<Element>> map = new HashMap<>();
 
+    /**
+     * 文件生成器
+     */
+    private Filer filer;
+    private String moduleName;
+    private Map<String, String> options;
+    private String packagenameForAPT;
+
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
         elementUtils = processingEnvironment.getElementUtils();
         messager = processingEnvironment.getMessager();
         typeUtils = processingEnvironment.getTypeUtils();
+        filer = processingEnvironment.getFiler();
+        options = processingEnvironment.getOptions();
+        parseOptions();
     }
 
     @Override
@@ -92,8 +111,7 @@ public class BindViewProcessor extends AbstractProcessor {
                 TypeElement activityType = elementUtils.getTypeElement(ProcessorConstants.ACTIVITY_FULLNAME);
                 TypeElement bindViewInterfaceType = elementUtils.getTypeElement(ProcessorConstants.BINDVIEWINTERFACE_FULLNAME);
 
-                ParameterSpec parameterSpec = ParameterSpec.builder(TypeName.OBJECT, TARGET_ARGUMENT).build();
-
+                ParameterSpec parameterSpec = ParameterSpec.builder(ClassName.get("java.lang", "Object"), TARGET_ARGUMENT).build();
                 for (Map.Entry<TypeElement, List<Element>> entry : map.entrySet()) {
                     TypeElement key = entry.getKey();
                     if (!typeUtils.isSubtype(key.asType(), activityType.asType())) {
@@ -101,9 +119,31 @@ public class BindViewProcessor extends AbstractProcessor {
                                 "@BindView can only be annotated in Activity");
                     } else {
                         ClassName className = ClassName.get(key);
+                        BindViewFactory bindViewFactory = new BindViewFactory.Builder(parameterSpec)
+                                .className(className)
+                                .elementUtils(elementUtils)
+                                .messager(messager)
+                                .typeUtils(typeUtils)
+                                .build();
+                        bindViewFactory.addFirstStatement();
+                        List<Element> elementList = entry.getValue();
+                        for (Element element : elementList) {
+                            bindViewFactory.buildStatement(element);
+                        }
+                        MethodSpec methodSpec = bindViewFactory.build();
+                        TypeSpec typeSpec = TypeSpec.classBuilder(className.getClass().getSimpleName() + "$$BindView")
+                                .addModifiers(Modifier.PUBLIC)
+                                .addMethod(methodSpec)
+                                .addSuperinterface(ClassName.get(bindViewInterfaceType))
+                                .build();
+                        JavaFile javaFile = JavaFile.builder(className.packageName(), typeSpec).build();
 
+                        try {
+                            javaFile.writeTo(filer);
+                        } catch (IOException e) {
+                            messager.printMessage(Diagnostic.Kind.ERROR, "create bindview file fail: " + e);
+                        }
                     }
-
                 }
             }
         }
@@ -120,6 +160,18 @@ public class BindViewProcessor extends AbstractProcessor {
                 list.add(element);
                 map.put(enclosingElement, list);
             }
+        }
+    }
+
+    private void parseOptions() {
+        moduleName = options.get(ProcessorConstants.MODULE_NAME);
+        packagenameForAPT = options.get(ProcessorConstants.PACKAGENAME_FOR_APT);
+        messager.printMessage(Diagnostic.Kind.NOTE, "moduleName=" + moduleName +
+                ",packagenameForAPT=" + packagenameForAPT);
+        if (moduleName != null && packagenameForAPT != null) {
+            messager.printMessage(Diagnostic.Kind.NOTE, "APT environment success");
+        } else {
+            messager.printMessage(Diagnostic.Kind.NOTE, "APT environment fail");
         }
     }
 }

@@ -8,6 +8,7 @@ public class MyRunnable implements Runnable {
 
     // 这是正确的覆盖
     @Override
+    @Test
     public void run() {
     }
 

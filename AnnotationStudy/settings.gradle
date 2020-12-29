@@ -1,2 +1,6 @@
+include ':bindview-api'
+include ':bindview'
+include ':bindview-compiler'
+include ':bindview-annotations'
 include ':app'
 rootProject.name = "AnnotationStudy"

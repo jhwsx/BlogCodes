@@ -44,7 +44,7 @@ dependencies {
     // 依赖注解模块
     implementation project(':bindview-annotations')
     // 依赖注解处理器模块
-    implementation project(':bindview-compiler')
+    annotationProcessor project(':bindview-compiler')
 
     implementation project(":bindview-api")
     testImplementation 'junit:junit:4.+'

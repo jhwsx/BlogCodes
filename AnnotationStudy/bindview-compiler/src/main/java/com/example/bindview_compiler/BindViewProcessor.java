@@ -131,7 +131,7 @@ public class BindViewProcessor extends AbstractProcessor {
                             bindViewFactory.buildStatement(element);
                         }
                         MethodSpec methodSpec = bindViewFactory.build();
-                        TypeSpec typeSpec = TypeSpec.classBuilder(className.getClass().getSimpleName() + "$$BindView")
+                        TypeSpec typeSpec = TypeSpec.classBuilder(key.getSimpleName() + "$$BindView")
                                 .addModifiers(Modifier.PUBLIC)
                                 .addMethod(methodSpec)
                                 .addSuperinterface(ClassName.get(bindViewInterfaceType))

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.iv)
     ImageView iv;
 
+    @BindView(R.id.btn)
+    Button btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,5 +30,11 @@ public class MainActivity extends AppCompatActivity {
         BindViewManager.getInstance().bind(this);
         tv.setText("Happy New Year!");
         iv.setImageResource(R.mipmap.ic_launcher);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SecondActivity.start(MainActivity.this);
+            }
+        });
     }
 }

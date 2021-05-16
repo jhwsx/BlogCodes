@@ -1,0 +1,4 @@
+include ':approach2'
+include ':approach1'
+include ':app'
+rootProject.name = "AndroidStudioSplitRes"

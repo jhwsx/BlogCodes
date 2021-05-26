@@ -1,0 +1,3 @@
+include ':lib'
+rootProject.name='JsonStudy'
+include ':app'

@@ -1,0 +1,3 @@
+include ':gate'
+include ':screen'
+rootProject.name = "MQTTStudy"

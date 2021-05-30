@@ -1,4 +1,4 @@
-package com.example.lib.basic;
+package com.example.lib._01_basic;
 
 class Person {
     private String name;

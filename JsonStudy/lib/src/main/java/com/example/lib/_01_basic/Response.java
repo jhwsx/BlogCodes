@@ -1,4 +1,4 @@
-package com.example.lib.basic;
+package com.example.lib._01_basic;
 
 class Response<T> {
     public int code;

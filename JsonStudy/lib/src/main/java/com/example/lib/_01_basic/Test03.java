@@ -1,30 +1,26 @@
-package com.example.lib.basic;
+package com.example.lib._01_basic;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Type;
 
 /**
  * 包含泛型的测试
  *
+ * 解决反序列化时出现的类型转换异常
+ *
  * @author wangzhichao
  * @since 2021/5/27
  */
-public class Test02 {
+public class Test03 {
     public static void main(String[] args) {
         Gson gson = new Gson();
-        // 序列化
-        Person person = new Person("willwaywang6", 18);
-        Response<Person> response = new Response<>();
-        response.code = 0;
-        response.message = "success";
-        response.data = person;
-        String responseJson = gson.toJson(response);
-        System.out.println(responseJson);
         // 反序列化
         String json = "{\"code\":0,\"message\":\"success\",\"data\":{\"name\":\"willwaywang6\",\"age\":18}}";
-        Response<Person> r = gson.fromJson(json, Response.class);
+        Type responseType = new TypeToken<Response<Person>>() {
+        }.getType();
+        Response<Person> r = gson.fromJson(json, responseType);
         System.out.println(r);
         System.out.println(r.data);
         try {

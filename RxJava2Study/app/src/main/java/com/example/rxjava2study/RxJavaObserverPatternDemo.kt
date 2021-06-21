@@ -35,7 +35,7 @@ object RxJavaObserverPatternDemo {
             }
         }
         // 2, 创建被观察者
-        val observable = Observable.create(object : ObservableOnSubscribe<String> {
+        val observableCreate = Observable.create(object : ObservableOnSubscribe<String> {
             override fun subscribe(emitter: ObservableEmitter<String>) {
                 // 4, 发送事件
                 Log.d(TAG, "subscribe: onNext：发送值 a")
@@ -51,6 +51,6 @@ object RxJavaObserverPatternDemo {
             }
         })
         // 3，订阅
-        observable.subscribe(observer)
+        observableCreate.subscribe(observer)
     }
 }

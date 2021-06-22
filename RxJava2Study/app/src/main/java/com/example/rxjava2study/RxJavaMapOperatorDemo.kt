@@ -6,23 +6,24 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 
 /**
- * RxJava 的观察者模式
+ * RxJava 的 map 操作符
  *
  * @author wangzhichao
- * @since 2021/6/19
+ * @since 2021/6/22
  */
-object RxJavaObserverPatternDemo {
-    private const val TAG = "RxJavaObserverPattern"
+object RxJavaMapOperatorDemo {
+    private const val TAG = "RxJavaMapOperator"
     fun show() {
         // 1, 创建观察者
-        val observer = object : Observer<String> {
+        val observer = object : Observer<Int> {
             override fun onSubscribe(d: Disposable) {
                 Log.d(TAG, "onSubscribe: ")
             }
 
-            override fun onNext(t: String) {
+            override fun onNext(t: Int) {
                 Log.d(TAG, "onNext: t=$t")
             }
 
@@ -38,7 +39,7 @@ object RxJavaObserverPatternDemo {
         val observableCreate = Observable.create(
                 object : ObservableOnSubscribe<String> {
                     override fun subscribe(emitter: ObservableEmitter<String>) {
-                        // 4, 发送事件
+                        // 5, 发送事件
                         Log.d(TAG, "subscribe: onNext：发送值 a")
                         emitter.onNext("a")
                         Log.d(TAG, "subscribe: onNext：发送值 b")
@@ -52,7 +53,14 @@ object RxJavaObserverPatternDemo {
                     }
                 }
         )
-        // 3，订阅
-        observableCreate.subscribe(observer)
+        // 3，使用 map 操作符对发送的数据进行变换
+        val observableMap = observableCreate.map(object : Function<String, Int> {
+            override fun apply(t: String): Int {
+                // 取出索引为0的元素，数据类型是 Char，然后转换为 Int 类型。
+                return t[0].toInt()
+            }
+        })
+        // 4，订阅
+        observableMap.subscribe(observer)
     }
 }

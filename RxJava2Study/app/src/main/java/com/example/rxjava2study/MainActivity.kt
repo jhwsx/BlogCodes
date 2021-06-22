@@ -15,5 +15,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.btnNormalObserverPattern.setOnClickListener { NormalObserverPatternDemo.show() }
         binding.btnRxjavaObserverPattern.setOnClickListener { RxJavaObserverPatternDemo.show() }
+        binding.btnRxjavaMapOperator.setOnClickListener { RxJavaMapOperatorDemo.show() }
     }
 }

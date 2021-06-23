@@ -7,15 +7,16 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
+import io.reactivex.functions.Predicate
 
 /**
- * RxJava 的 map 操作符
+ * RxJava 的 map + filter 操作符
  *
  * @author wangzhichao
- * @since 2021/6/22
+ * @since 2021/6/24
  */
-object RxJavaMapOperatorDemo {
-    private const val TAG = "RxJavaMapOperator"
+object RxJavaMapFilterOperatorDemo {
+    private const val TAG = "RxJavaMapFilterOperator"
     fun show() {
         // 1, 创建观察者
         val observer = object : Observer<Int> {
@@ -39,7 +40,7 @@ object RxJavaMapOperatorDemo {
         val observableCreate = Observable.create(
                 object : ObservableOnSubscribe<String> {
                     override fun subscribe(emitter: ObservableEmitter<String>) {
-                        // 5, 发送事件
+                        // 6, 发送事件
                         Log.d(TAG, "subscribe: onNext：发送值 a")
                         emitter.onNext("a")
                         Log.d(TAG, "subscribe: onNext：发送值 b")
@@ -62,7 +63,14 @@ object RxJavaMapOperatorDemo {
                     }
                 }
         )
-        // 4，订阅
-        observableMap.subscribe(observer)
+        // 4，使用 filter 操作符只发送奇数
+        val observableFilter = observableMap.filter(object : Predicate<Int> {
+            override fun test(t: Int): Boolean {
+                // 判断 t 是不是奇数，是则发送；反之，不发送。
+                return t % 2 != 0
+            }
+        })
+        // 5，订阅
+        observableFilter.subscribe(observer)
     }
 }

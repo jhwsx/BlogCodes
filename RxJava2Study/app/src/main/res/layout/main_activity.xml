@@ -31,4 +31,12 @@
         android:layout_marginHorizontal="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_rxjava_map_filter_operator"
+        android:text="RxJava的 map + filter 操作符"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

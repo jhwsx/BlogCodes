@@ -17,5 +17,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnRxjavaObserverPattern.setOnClickListener { RxJavaObserverPatternDemo.show() }
         binding.btnRxjavaMapOperator.setOnClickListener { RxJavaMapOperatorDemo.show() }
         binding.btnRxjavaMapFilterOperator.setOnClickListener { RxJavaMapFilterOperatorDemo.show() }
+        binding.btnRxjavaTimeconsumingEvent.setOnClickListener { RxJavaTimeConsumingEventDemo.show() }
+        binding.btnRxjavaSubscribeOn.setOnClickListener { RxJavaSubscribeOnDemo.show() }
+        binding.btnRxjavaObserveOn.setOnClickListener { RxJavaObserveOnDemo.show() }
     }
 }

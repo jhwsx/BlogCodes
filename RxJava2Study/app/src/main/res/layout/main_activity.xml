@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".MainActivity">
 
     <Button
@@ -35,6 +36,31 @@
     <Button
         android:id="@+id/btn_rxjava_map_filter_operator"
         android:text="RxJava的 map + filter 操作符"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/btn_rxjava_timeconsuming_event"
+        android:text="RxJava 发送耗时事件"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_rxjava_subscribeOn"
+        android:text="RxJava的 subscribeOn()"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_rxjava_observeOn"
+        android:text="RxJava的 observeOn()"
         android:textAllCaps="false"
         android:layout_marginHorizontal="8dp"
         android:layout_width="match_parent"

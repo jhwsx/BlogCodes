@@ -41,20 +41,11 @@ object RxJavaObserveOnDemo {
         val observableCreate = Observable.create(
             object : ObservableOnSubscribe<String> {
                 override fun subscribe(emitter: ObservableEmitter<String>) {
-                    // 5, 发送事件
+                    // 5, 子线程发送事件
                     thread {
                         TimeUnit.SECONDS.sleep(3L)
                         Log.d(TAG, "subscribe: onNext：发送值 a, currThread=${Thread.currentThread().name}")
                         emitter.onNext("a")
-                        TimeUnit.SECONDS.sleep(3L)
-                        Log.d(TAG, "subscribe: onNext：发送值 b, currThread=${Thread.currentThread().name}")
-                        emitter.onNext("b")
-                        TimeUnit.SECONDS.sleep(3L)
-                        Log.d(TAG, "subscribe: onNext：发送值 c, currThread=${Thread.currentThread().name}")
-                        emitter.onNext("c")
-                        TimeUnit.SECONDS.sleep(3L)
-                        Log.d(TAG, "subscribe: onNext：发送值 d, currThread=${Thread.currentThread().name}")
-                        emitter.onNext("d")
                         TimeUnit.SECONDS.sleep(3L)
                         Log.d(TAG, "subscribe: onComplete, currThread=${Thread.currentThread().name}")
                         emitter.onComplete()

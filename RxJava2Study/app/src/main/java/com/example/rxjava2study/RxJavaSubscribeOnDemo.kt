@@ -50,7 +50,11 @@ object RxJavaSubscribeOnDemo {
             }
         )
         // 3，指定在 io 线程里发送事件
-        val observableSubscribeOn = observableCreate.subscribeOn(Schedulers.io())
+        val observableSubscribeOn = observableCreate
+            .subscribeOn(Schedulers.io()) // RxCachedThreadScheduler
+            .subscribeOn(Schedulers.computation()) // RxComputationThreadPool
+            .subscribeOn(Schedulers.newThread()) // RxNewThreadScheduler
+
         // 4，订阅
         observableSubscribeOn.subscribe(observer)
     }

@@ -56,8 +56,8 @@ object RxJavaMultipleObserveOnDemo {
         // 3，指定在 main 线程里观察事件
         val observableObserveOn1 = observableCreate.observeOn(AndroidSchedulers.mainThread()) // main
         val observableObserveOn2 = observableObserveOn1.observeOn(Schedulers.io()) // RxCachedThreadScheduler
-        val observableObserveOn3 = observableObserveOn1.observeOn(Schedulers.newThread()) // RxNewThreadScheduler
+        val observableObserveOn3 = observableObserveOn2.observeOn(Schedulers.newThread()) // RxNewThreadScheduler
         // 4，订阅
-        observableObserveOn2.subscribe(observer)
+        observableObserveOn3.subscribe(observer)
     }
 }

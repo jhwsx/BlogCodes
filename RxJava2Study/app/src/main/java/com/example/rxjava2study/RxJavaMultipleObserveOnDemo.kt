@@ -16,8 +16,8 @@ import kotlin.concurrent.thread
  * @author wangzhichao
  * @since 2021/6/24
  */
-object RxJavaObserveOnDemo {
-    private const val TAG = "RxJavaObserveOnDemo"
+object RxJavaMultipleObserveOnDemo {
+    private const val TAG = "MultipleObserveOn"
     fun show() {
         // 1, 创建观察者
         val observer = object : Observer<String> {
@@ -54,8 +54,10 @@ object RxJavaObserveOnDemo {
             }
         )
         // 3，指定在 main 线程里观察事件
-        val observableObserveOn = observableCreate.observeOn(AndroidSchedulers.mainThread())
+        val observableObserveOn1 = observableCreate.observeOn(AndroidSchedulers.mainThread()) // main
+        val observableObserveOn2 = observableObserveOn1.observeOn(Schedulers.io()) // RxCachedThreadScheduler
+        val observableObserveOn3 = observableObserveOn1.observeOn(Schedulers.newThread()) // RxNewThreadScheduler
         // 4，订阅
-        observableObserveOn.subscribe(observer)
+        observableObserveOn2.subscribe(observer)
     }
 }

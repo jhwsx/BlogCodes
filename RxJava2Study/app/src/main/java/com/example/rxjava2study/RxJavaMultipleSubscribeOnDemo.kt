@@ -5,19 +5,17 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 
 /**
  *
  * @author wangzhichao
- * @since 2021/6/24
+ * @since 2021/6/27
  */
-object RxJavaObserveOnDemo {
-    private const val TAG = "RxJavaObserveOnDemo"
+object RxJavaMultipleSubscribeOnDemo {
+    private const val TAG = "MultipleSubscribeOn"
     fun show() {
         // 1, 创建观察者
         val observer = object : Observer<String> {
@@ -41,21 +39,22 @@ object RxJavaObserveOnDemo {
         val observableCreate = Observable.create(
             object : ObservableOnSubscribe<String> {
                 override fun subscribe(emitter: ObservableEmitter<String>) {
-                    // 5, 子线程发送事件
-                    thread(name = "WorkThread") {
-                        TimeUnit.SECONDS.sleep(3L)
-                        Log.d(TAG, "subscribe: onNext：发送值 a, currThread=${Thread.currentThread().name}")
-                        emitter.onNext("a")
-                        TimeUnit.SECONDS.sleep(3L)
-                        Log.d(TAG, "subscribe: onComplete, currThread=${Thread.currentThread().name}")
-                        emitter.onComplete()
-                    }
+                    // 5, 发送事件
+                    TimeUnit.SECONDS.sleep(3L)
+                    Log.d(TAG, "subscribe: onNext：发送值 a, currThread=${Thread.currentThread().name}")
+                    emitter.onNext("a")
+                    TimeUnit.SECONDS.sleep(3L)
+                    Log.d(TAG, "subscribe: onComplete, currThread=${Thread.currentThread().name}")
+                    emitter.onComplete()
                 }
             }
         )
-        // 3，指定在 main 线程里观察事件
-        val observableObserveOn = observableCreate.observeOn(AndroidSchedulers.mainThread())
+        // 3，指定在 io 线程里发送事件
+        val observableSubscribeOn1 = observableCreate.subscribeOn(Schedulers.io()) // RxCachedThreadScheduler
+        val observableSubscribeOn2 = observableSubscribeOn1.subscribeOn(Schedulers.computation()) // RxComputationThreadPool
+        val observableSubscribeOn3 = observableSubscribeOn2.subscribeOn(Schedulers.newThread()) // RxNewThreadScheduler
+
         // 4，订阅
-        observableObserveOn.subscribe(observer)
+        observableSubscribeOn3.subscribe(observer)
     }
 }

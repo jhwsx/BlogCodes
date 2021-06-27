@@ -59,8 +59,24 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/btn_rxjava_multiple_subscribeOn"
+        android:text="RxJava 连续多个subscribeOn()"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/btn_rxjava_observeOn"
         android:text="RxJava的 observeOn()"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_rxjava_multiple_observeOn"
+        android:text="RxJava 连续多个observeOn()"
         android:textAllCaps="false"
         android:layout_marginHorizontal="8dp"
         android:layout_width="match_parent"

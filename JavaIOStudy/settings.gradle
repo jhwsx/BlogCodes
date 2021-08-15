@@ -1,2 +1,3 @@
+include ':javaio'
 include ':app'
 rootProject.name = "JavaIOStudy"

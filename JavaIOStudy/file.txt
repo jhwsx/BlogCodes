@@ -1,0 +1,6 @@
+Hello world!
+你好，世界！
+How are you?
+你好吗？
+Where are you from?
+你来自哪里？

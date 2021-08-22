@@ -1,4 +1,4 @@
-package com.example.javaio._02_copytextfile;
+package com.example.javaio._02_bytestream.copytextfile;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

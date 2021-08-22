@@ -21,7 +21,7 @@ public class RecurseDirDemo2 {
 
     private static List<File> getFileListInDir(File dir, FileFilter fileFilter) {
         List<File> result = new ArrayList<>();
-        if (dir.exists() && dir.isDirectory()) {
+        if (dir.isDirectory()) {
             File[] files = dir.listFiles(fileFilter);
             if (files != null) {
                 for (File file : files) {

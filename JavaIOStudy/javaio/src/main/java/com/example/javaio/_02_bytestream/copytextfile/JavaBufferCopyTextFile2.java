@@ -1,5 +1,6 @@
 package com.example.javaio._02_bytestream.copytextfile;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

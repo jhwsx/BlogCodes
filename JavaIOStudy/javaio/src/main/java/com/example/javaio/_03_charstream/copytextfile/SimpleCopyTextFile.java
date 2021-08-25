@@ -22,7 +22,7 @@ public class SimpleCopyTextFile {
             // 5, 刷新该流的缓冲
             fw.flush();
         }
-        // 5，关闭流资源
+        // 6，关闭流资源
         fw.close();
         fr.close();
     }

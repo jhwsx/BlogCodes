@@ -46,7 +46,7 @@ class FlowLayout @JvmOverloads constructor(
             val child = getChildAt(i)
             if (child.visibility != View.GONE) {
                 // 测量子 View
-                val lp = child.layoutParams
+                val lp = child.layoutParams as MarginLayoutParams
                 val childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec,
                     getPaddingLeft() + getPaddingRight(), lp.width)
                 val childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec,
@@ -55,12 +55,14 @@ class FlowLayout @JvmOverloads constructor(
                 // 获取子 View 的测量宽/高
                 val childMeasuredWidth = child.getMeasuredWidth()
                 val childMeasuredHeight = child.getMeasuredHeight()
+                val actualChildWidth = childMeasuredWidth + lp.leftMargin + lp.rightMargin
+                val actualChildHeight = childMeasuredHeight + lp.topMargin + lp.bottomMargin
                 val actualItemHorizontalSpacing = if (lineWidth == 0) 0 else itemHorizontalSpacing
-                if (lineWidth + actualItemHorizontalSpacing + childMeasuredWidth <= maxWidth - getPaddingLeft() - getPaddingRight()) {
+                if (lineWidth + actualItemHorizontalSpacing + actualChildWidth <= maxWidth - getPaddingLeft() - getPaddingRight()) {
                     // 在本行还可以放置一个子 View
-                    lineWidth += actualItemHorizontalSpacing + childMeasuredWidth
+                    lineWidth += actualItemHorizontalSpacing + actualChildWidth
                     // 行高为一行中所有子 View 最高的那一个
-                    lineHeight = max(lineHeight, childMeasuredHeight)
+                    lineHeight = max(lineHeight, actualChildHeight)
                     lineViews.add(child)
                 } else {
                     // 在本行不可以放置一个子 View，需要换行
@@ -69,8 +71,8 @@ class FlowLayout @JvmOverloads constructor(
                     totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
                     lineHeights.add(lineHeight)
                     allLineViews.add(lineViews)
-                    lineWidth = childMeasuredWidth
-                    lineHeight = childMeasuredHeight
+                    lineWidth = actualChildWidth
+                    lineHeight = actualChildHeight
                     lineViews = ArrayList<View>()
                     lineViews.add(child)
                 }
@@ -107,12 +109,14 @@ class FlowLayout @JvmOverloads constructor(
             // 遍历一行中的所有子元素
             for (j in 0 until lineViews.size) {
                 val child = lineViews[j]
+                val lp = child.layoutParams as MarginLayoutParams
+                childLeft += lp.leftMargin
                 val childMeasuredWidth = child.getMeasuredWidth()
                 val childMeasuredHeight = child.getMeasuredHeight()
                 // 确定子元素的位置
-                child.layout(childLeft, childTop, childLeft + childMeasuredWidth, childTop + childMeasuredHeight)
+                child.layout(childLeft, childTop + lp.topMargin, childLeft + childMeasuredWidth, childTop + lp.topMargin + childMeasuredHeight)
                 // 更新 childLeft，作为该行下一个子元素的左上角横坐标
-                childLeft += childMeasuredWidth + itemHorizontalSpacing
+                childLeft += childMeasuredWidth + lp.rightMargin + itemHorizontalSpacing
             }
             // 更新 childTop，作为下一行子元素的左上角纵坐标
             childTop += lineHeight + itemVerticalSpacing
@@ -121,7 +125,18 @@ class FlowLayout @JvmOverloads constructor(
         }
     }
 
+    // 当通过 addView(View) 方法添加子元素，并且子元素没有设置布局参数时，会调用此方法来生成默认的布局参数
+    // 这里重写返回 MarginLayoutParams 对象，是为了在获取子元素的 LayoutParams 对象时，可以正常强转为 MarginLayoutParams
+    override fun generateDefaultLayoutParams(): LayoutParams {
+        return MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+    }
 
+    // 当通过 xml 添加时，会走这个方法获取子 View 的布局参数
+    // 但是，默认的实现只会从 AttributeSet 里解析 layout_width 和 layout_height 这两个属性
+    // 这里重写的目的是解析 margin 属性。
+    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
+        return MarginLayoutParams(getContext(), attrs)
+    }
     companion object {
         private const val TAG = "FlowLayout"
     }

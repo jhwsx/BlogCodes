@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <com.example.lib.FlowLayout
+        android:id="@+id/flowlayout"
         android:background="#44ff0000"
         android:padding="8dp"
         android:layout_width="wrap_content"

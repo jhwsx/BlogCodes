@@ -8,7 +8,25 @@
     tools:context=".MainActivity">
 
     <com.example.lib.FlowLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:background="#44ff0000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:text="Android"
+            style="@style/ItemStyle" />
+
+        <TextView
+            android:text="Kotlin"
+            style="@style/ItemStyle" />
+
+        <TextView
+            android:text="Java"
+            style="@style/ItemStyle" />
+
+        <TextView
+            android:text="Custom View"
+            style="@style/ItemStyle" />
+    </com.example.lib.FlowLayout>
 
 </LinearLayout>

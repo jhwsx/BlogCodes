@@ -56,7 +56,7 @@ class FlowLayout @JvmOverloads constructor(
                 val childMeasuredWidth = child.getMeasuredWidth()
                 val childMeasuredHeight = child.getMeasuredHeight()
                 val actualItemHorizontalSpacing = if (lineWidth == 0) 0 else itemHorizontalSpacing
-                if (lineWidth + actualItemHorizontalSpacing + childMeasuredWidth <= maxWidth) {
+                if (lineWidth + actualItemHorizontalSpacing + childMeasuredWidth <= maxWidth - getPaddingLeft() - getPaddingRight()) {
                     // 在本行还可以放置一个子 View
                     lineWidth += actualItemHorizontalSpacing + childMeasuredWidth
                     // 行高为一行中所有子 View 最高的那一个
@@ -84,6 +84,8 @@ class FlowLayout @JvmOverloads constructor(
                 allLineViews.add(lineViews)
             }
         }
+        maxLineWidth += getPaddingLeft() + getPaddingRight()
+        totalHeight += getPaddingTop() + getPaddingBottom()
         Log.d(TAG, "onMeasure: lineCount=$lineCount")
         val measuredWidth = if (widthMode == MeasureSpec.EXACTLY) widthSize else maxLineWidth
         val measuredHeight = if (heightMode == MeasureSpec.EXACTLY) heightSize else totalHeight
@@ -95,9 +97,9 @@ class FlowLayout @JvmOverloads constructor(
         val lineCount = allLineViews.size
         Log.d(TAG, "onLayout: lineCount=$lineCount")
         // 子元素的左上角横坐标
-        var childLeft = 0
+        var childLeft = getPaddingLeft()
         // 子元素的左上角纵坐标
-        var childTop = 0
+        var childTop = getPaddingTop()
         // 遍历行
         for (i in 0 until lineCount) {
             val lineViews = allLineViews[i]
@@ -115,7 +117,7 @@ class FlowLayout @JvmOverloads constructor(
             // 更新 childTop，作为下一行子元素的左上角纵坐标
             childTop += lineHeight + itemVerticalSpacing
             // 更新 childLeft，作为下一行子元素的左上角横坐标
-            childLeft = 0
+            childLeft = getPaddingLeft()
         }
     }
 

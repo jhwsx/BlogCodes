@@ -9,6 +9,7 @@
 
     <com.example.lib.FlowLayout
         android:background="#44ff0000"
+        android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 

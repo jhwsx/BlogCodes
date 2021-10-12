@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">FlowLayout</string>
+    <string-array name="tab_array">
+        <item>Material Design</item>
+        <item>Material You</item>
+        <item>Compose</item>
+        <item>面试</item>
+        <item>自定义 View</item>
+        <item>开发语言</item>
+        <item>JNI</item>
+        <item>广场Tab</item>
+        <item>原创文章</item>
+        <item>Flutter</item>
+        <item>Framework</item>
+        <item>常见开源库源码解析</item>
+        <item>翻译</item>
+        <item>图片加载</item>
+        <item>Java 深入</item>
+        <item>大前端</item>
+        <item>设计</item>
+        <item>Java深入</item>
+        <item>注解 &amp; 反射 &amp; AOP</item>
+        <item>硬件模块</item>
+        <item>基础知识</item>
+        <item>四大组件</item>
+        <item>项目管理</item>
+        <item>Jetpack</item>
+        <item>视频</item>
+    </string-array>
 </resources>

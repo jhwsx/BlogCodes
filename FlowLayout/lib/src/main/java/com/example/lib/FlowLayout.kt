@@ -131,6 +131,16 @@ class FlowLayout @JvmOverloads constructor(
         return MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
     }
 
+    // 检查传入的布局参数是否符合某个条件
+    override fun checkLayoutParams(p: LayoutParams?): Boolean {
+        return p is MarginLayoutParams
+    }
+
+    // addViewInner 中调用，但是布局参数类型无法通过 checkLayoutParams() 判断时，会走这个方法。
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams {
+        return MarginLayoutParams(p)
+    }
+
     // 当通过 xml 添加时，会走这个方法获取子 View 的布局参数
     // 但是，默认的实现只会从 AttributeSet 里解析 layout_width 和 layout_height 这两个属性
     // 这里重写的目的是解析 margin 属性。

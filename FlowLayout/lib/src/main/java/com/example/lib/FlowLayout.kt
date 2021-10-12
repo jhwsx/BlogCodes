@@ -24,6 +24,18 @@ class FlowLayout @JvmOverloads constructor(
      * 所有行的行高的集合
      */
     private val lineHeights = ArrayList<Int>()
+
+    var lineVerticalGravity: Int = LINE_VERTICAL_GRAVITY_CENTER_VERTICAL
+        set(value) {
+            field = value
+            requestLayout()
+        }
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout)
+        lineVerticalGravity = ta.getInt(R.styleable.FlowLayout_flowlayout_line_vertical_gravity, LINE_VERTICAL_GRAVITY_CENTER_VERTICAL)
+        Log.d(TAG, "init: lineVerticalGravity=$lineVerticalGravity")
+        ta.recycle()
+    }
     @SuppressLint("DrawAllocation")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -113,8 +125,10 @@ class FlowLayout @JvmOverloads constructor(
                 childLeft += lp.leftMargin
                 val childMeasuredWidth = child.getMeasuredWidth()
                 val childMeasuredHeight = child.getMeasuredHeight()
+                val offsetTop = getOffsetTop(lineHeight, child)
                 // 确定子元素的位置
-                child.layout(childLeft, childTop + lp.topMargin, childLeft + childMeasuredWidth, childTop + lp.topMargin + childMeasuredHeight)
+                child.layout(childLeft, childTop + lp.topMargin + offsetTop, childLeft + childMeasuredWidth,
+                    childTop + lp.topMargin + offsetTop+ childMeasuredHeight)
                 // 更新 childLeft，作为该行下一个子元素的左上角横坐标
                 childLeft += childMeasuredWidth + lp.rightMargin + itemHorizontalSpacing
             }
@@ -122,6 +136,20 @@ class FlowLayout @JvmOverloads constructor(
             childTop += lineHeight + itemVerticalSpacing
             // 更新 childLeft，作为下一行子元素的左上角横坐标
             childLeft = getPaddingLeft()
+        }
+    }
+
+    private fun getOffsetTop(lineHeight: Int, child: View): Int {
+        val lp = child.layoutParams as MarginLayoutParams
+        val childMeasuredHeight = child.getMeasuredHeight()
+        val childMeasuredHeightWithMargin = childMeasuredHeight + lp.topMargin + lp.bottomMargin
+        return when (lineVerticalGravity) {
+            LINE_VERTICAL_GRAVITY_TOP -> 0
+            LINE_VERTICAL_GRAVITY_CENTER_VERTICAL -> (lineHeight - childMeasuredHeightWithMargin) / 2
+            LINE_VERTICAL_GRAVITY_BOTTOM -> lineHeight - childMeasuredHeightWithMargin
+            else -> {
+                throw IllegalArgumentException("unknown lineVerticalGravity value: $lineVerticalGravity")
+            }
         }
     }
 
@@ -147,7 +175,11 @@ class FlowLayout @JvmOverloads constructor(
     override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
         return MarginLayoutParams(getContext(), attrs)
     }
+
     companion object {
         private const val TAG = "FlowLayout"
+        const val LINE_VERTICAL_GRAVITY_TOP = 0
+        const val LINE_VERTICAL_GRAVITY_CENTER_VERTICAL = 1
+        const val LINE_VERTICAL_GRAVITY_BOTTOM = 2
     }
 }

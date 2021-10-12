@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import com.blog.flowlayout.databinding.ActivityMainBinding
+import com.example.lib.FlowLayout
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -45,13 +46,25 @@ class MainActivity : AppCompatActivity() {
                     text = tabArray[tabIndex]
                     setBackgroundResource(R.drawable.shape_button_circular)
                     setPadding(12.dp2px(), 2.dp2px(), 12.dp2px(), 2.dp2px())
-                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                     layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
                 })
                 tabIndex++
                 true
             }
             R.id.action_remove_item -> {
+                true
+            }
+            R.id.action_line_vertical_gravity_top -> {
+                binding.flowlayout.lineVerticalGravity = FlowLayout.LINE_VERTICAL_GRAVITY_TOP
+                true
+            }
+            R.id.action_line_vertical_gravity_center_vertical -> {
+                binding.flowlayout.lineVerticalGravity = FlowLayout.LINE_VERTICAL_GRAVITY_CENTER_VERTICAL
+                true
+            }
+            R.id.action_line_vertical_gravity_bottom -> {
+                binding.flowlayout.lineVerticalGravity = FlowLayout.LINE_VERTICAL_GRAVITY_BOTTOM
                 true
             }
             else -> {

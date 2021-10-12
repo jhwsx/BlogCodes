@@ -13,4 +13,16 @@
         android:id="@+id/action_remove_item"
         android:title="减少一个item"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_line_vertical_gravity_top"
+        android:title="行内垂直方向靠顶部"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_line_vertical_gravity_center_vertical"
+        android:title="行内垂直方向居中"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_line_vertical_gravity_bottom"
+        android:title="行内垂直方向靠底部"
+        app:showAsAction="never" />
 </menu>

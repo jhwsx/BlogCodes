@@ -25,4 +25,28 @@
         android:id="@+id/action_line_vertical_gravity_bottom"
         android:title="行内垂直方向靠底部"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_maxlines_1"
+        android:title="限制最多显示一行"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_maxlines_3"
+        android:title="限制最多显示三行"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_maxCount_3"
+        android:title="限制最多3个"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_maxCount_6"
+        android:title="限制最多6个"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_maxlines_maxCount_no_limit"
+        android:title="不限制行数"
+        app:showAsAction="never" />
 </menu>

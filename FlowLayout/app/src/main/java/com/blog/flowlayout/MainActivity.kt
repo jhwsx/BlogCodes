@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_remove_item -> {
+                val childCount = binding.flowlayout.childCount
+                if (childCount > 0) {
+                    binding.flowlayout.removeViewAt(childCount - 1)
+                }
                 true
             }
             R.id.action_line_vertical_gravity_top -> {
@@ -65,6 +69,27 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_line_vertical_gravity_bottom -> {
                 binding.flowlayout.lineVerticalGravity = FlowLayout.LINE_VERTICAL_GRAVITY_BOTTOM
+                true
+            }
+            R.id.action_maxlines_1 -> {
+                binding.flowlayout.maxLines = 1
+                true
+            }
+            R.id.action_maxlines_3 -> {
+                binding.flowlayout.maxLines = 3
+                true
+            }
+            R.id.action_maxCount_3 -> {
+                binding.flowlayout.maxCount = 3
+                true
+            }
+            R.id.action_maxCount_6 -> {
+                binding.flowlayout.maxCount = 6
+                true
+            }
+            R.id.action_maxlines_maxCount_no_limit -> {
+                binding.flowlayout.maxLines = Int.MAX_VALUE
+                binding.flowlayout.maxCount = Int.MAX_VALUE
                 true
             }
             else -> {

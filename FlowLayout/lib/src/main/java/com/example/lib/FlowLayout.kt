@@ -30,10 +30,31 @@ class FlowLayout @JvmOverloads constructor(
             field = value
             requestLayout()
         }
+    var mode: Int = MODE_LIMIT_MAX_COUNT
+    var maxLines: Int = Int.MAX_VALUE
+        set(value) {
+            mode = MODE_LIMIT_MAX_LINE
+            field = value
+            requestLayout()
+        }
+    var maxCount: Int = Int.MAX_VALUE
+        set(value) {
+            mode = MODE_LIMIT_MAX_COUNT
+            field = value
+            if (maxLines != Int.MAX_VALUE) {
+                maxLines = Int.MAX_VALUE
+            }
+            requestLayout()
+        }
+
     init {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout)
         lineVerticalGravity = ta.getInt(R.styleable.FlowLayout_flowlayout_line_vertical_gravity, LINE_VERTICAL_GRAVITY_CENTER_VERTICAL)
         Log.d(TAG, "init: lineVerticalGravity=$lineVerticalGravity")
+        // 默认值为 Int.MAX_VALUE，表示不限制行数
+        maxLines = ta.getInt(R.styleable.FlowLayout_android_maxLines, Int.MAX_VALUE)
+        Log.d(TAG, "init: maxLines=$maxLines")
+        maxCount = ta.getInt(R.styleable.FlowLayout_maxCount, Int.MAX_VALUE)
         ta.recycle()
     }
     @SuppressLint("DrawAllocation")
@@ -54,6 +75,7 @@ class FlowLayout @JvmOverloads constructor(
         val childCount = getChildCount()
         var lineViews = ArrayList<View>()
         var lineCount = 0
+        var measuredChildCount = 0
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility != View.GONE) {
@@ -78,6 +100,9 @@ class FlowLayout @JvmOverloads constructor(
                     lineViews.add(child)
                 } else {
                     // 在本行不可以放置一个子 View，需要换行
+                    if (lineCount == maxLines && mode == MODE_LIMIT_MAX_LINE) {
+                        break
+                    }
                     maxLineWidth = max(lineWidth, maxLineWidth)
                     lineCount++
                     totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
@@ -88,14 +113,21 @@ class FlowLayout @JvmOverloads constructor(
                     lineViews = ArrayList<View>()
                     lineViews.add(child)
                 }
+                measuredChildCount++
             }
 
-            if (i == childCount - 1) {
+            if (i == childCount - 1 || (measuredChildCount == maxCount && mode == MODE_LIMIT_MAX_COUNT)) {
+                if (lineCount == maxLines && mode == MODE_LIMIT_MAX_LINE) {
+                    break
+                }
                 maxLineWidth = max(lineWidth, maxLineWidth)
                 lineCount++
                 totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
                 lineHeights.add(lineHeight)
                 allLineViews.add(lineViews)
+                if (measuredChildCount == maxCount) {
+                    break
+                }
             }
         }
         maxLineWidth += getPaddingLeft() + getPaddingRight()
@@ -114,8 +146,11 @@ class FlowLayout @JvmOverloads constructor(
         var childLeft = getPaddingLeft()
         // 子元素的左上角纵坐标
         var childTop = getPaddingTop()
+        var nextChildIndex = 0
         // 遍历行
-        for (i in 0 until lineCount) {
+        val itemCount = allLineViews.sumOf { it.size }
+        Log.d(TAG, "onLayout: itemCount=$itemCount,childCount=$childCount")
+        outer@for (i in 0 until lineCount) {
             val lineViews = allLineViews[i]
             val lineHeight = lineHeights[i]
             // 遍历一行中的所有子元素
@@ -129,6 +164,7 @@ class FlowLayout @JvmOverloads constructor(
                 // 确定子元素的位置
                 child.layout(childLeft, childTop + lp.topMargin + offsetTop, childLeft + childMeasuredWidth,
                     childTop + lp.topMargin + offsetTop+ childMeasuredHeight)
+                nextChildIndex = indexOfChild(child)
                 // 更新 childLeft，作为该行下一个子元素的左上角横坐标
                 childLeft += childMeasuredWidth + lp.rightMargin + itemHorizontalSpacing
             }
@@ -136,6 +172,15 @@ class FlowLayout @JvmOverloads constructor(
             childTop += lineHeight + itemVerticalSpacing
             // 更新 childLeft，作为下一行子元素的左上角横坐标
             childLeft = getPaddingLeft()
+        }
+
+        val childCount = getChildCount()
+        for (i in nextChildIndex + 1 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility == View.GONE) {
+                continue
+            }
+            child.layout(0,0,0,0)
         }
     }
 
@@ -181,5 +226,8 @@ class FlowLayout @JvmOverloads constructor(
         const val LINE_VERTICAL_GRAVITY_TOP = 0
         const val LINE_VERTICAL_GRAVITY_CENTER_VERTICAL = 1
         const val LINE_VERTICAL_GRAVITY_BOTTOM = 2
+
+        const val MODE_LIMIT_MAX_LINE = 0
+        const val MODE_LIMIT_MAX_COUNT = 1
     }
 }

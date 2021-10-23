@@ -73,8 +73,9 @@ class FlowLayout @JvmOverloads constructor(
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        Log.d(TAG, "onMeasure: widthMeasureSpec=${MeasureSpec.toString(widthMeasureSpec)}, heightMeasureSpec=${MeasureSpec.toString(heightMeasureSpec)}")
         // 获取流式布局允许的最大宽度
-        val maxWidth = widthSize
+        val maxWidth = if (widthMode != MeasureSpec.UNSPECIFIED) widthSize else Int.MAX_VALUE
         var lineWidth = 0 // 行宽
         var maxLineWidth = 0 // 最大行宽
         var lineHeight = 0 // 行高

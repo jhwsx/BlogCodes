@@ -8,5 +8,7 @@
         </attr>
         <attr name="android:maxLines"/>
         <attr name="maxCount" format="integer"/>
+        <attr name="itemHorizontalSpacing" format="dimension" />
+        <attr name="itemVerticalSpacing" format="dimension" />
     </declare-styleable>
 </resources>

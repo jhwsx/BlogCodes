@@ -13,9 +13,17 @@ class FlowLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
     // 子元素水平间距
-    private var itemHorizontalSpacing = 20
+    var itemHorizontalSpacing: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
     // 子元素竖直间距
-    private var itemVerticalSpacing = 20
+    var itemVerticalSpacing: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
     /**
      * 记录每一行所有的子 View 的集合
      */
@@ -41,9 +49,6 @@ class FlowLayout @JvmOverloads constructor(
         set(value) {
             mode = MODE_LIMIT_MAX_COUNT
             field = value
-            if (maxLines != Int.MAX_VALUE) {
-                maxLines = Int.MAX_VALUE
-            }
             requestLayout()
         }
 
@@ -55,6 +60,8 @@ class FlowLayout @JvmOverloads constructor(
         maxLines = ta.getInt(R.styleable.FlowLayout_android_maxLines, Int.MAX_VALUE)
         Log.d(TAG, "init: maxLines=$maxLines")
         maxCount = ta.getInt(R.styleable.FlowLayout_maxCount, Int.MAX_VALUE)
+        itemHorizontalSpacing = ta.getDimensionPixelSize(R.styleable.FlowLayout_itemHorizontalSpacing, 0)
+        itemVerticalSpacing = ta.getDimensionPixelSize(R.styleable.FlowLayout_itemVerticalSpacing, 0)
         ta.recycle()
     }
     @SuppressLint("DrawAllocation")
@@ -125,7 +132,7 @@ class FlowLayout @JvmOverloads constructor(
                 totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
                 lineHeights.add(lineHeight)
                 allLineViews.add(lineViews)
-                if (measuredChildCount == maxCount) {
+                if (measuredChildCount == maxCount && mode == MODE_LIMIT_MAX_COUNT) {
                     break
                 }
             }

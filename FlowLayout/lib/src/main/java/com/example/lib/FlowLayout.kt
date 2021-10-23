@@ -29,7 +29,7 @@ class FlowLayout @JvmOverloads constructor(
     /**
      * 记录每一行所有的子 View 的集合
      */
-    private val allLineViews = ArrayList<ArrayList<View>>()
+//    private val allLineViews = ArrayList<ArrayList<View>>()
     /**
      * 所有行的行高的集合
      */
@@ -66,10 +66,10 @@ class FlowLayout @JvmOverloads constructor(
         itemVerticalSpacing = ta.getDimensionPixelSize(R.styleable.FlowLayout_itemVerticalSpacing, 0)
         ta.recycle()
     }
-    @SuppressLint("DrawAllocation")
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        allLineViews.clear()
+//        allLineViews.clear()
         lineHeights.clear()
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
@@ -83,7 +83,7 @@ class FlowLayout @JvmOverloads constructor(
         var lineHeight = 0 // 行高
         var totalHeight = 0 // 总高度
         val childCount = getChildCount()
-        var lineViews = ArrayList<View>()
+//        var lineViews = ArrayList<View>()
         var lineCount = 0
         var measuredChildCount = 0
         for (i in 0 until childCount) {
@@ -107,7 +107,7 @@ class FlowLayout @JvmOverloads constructor(
                     lineWidth += actualItemHorizontalSpacing + actualChildWidth
                     // 行高为一行中所有子 View 最高的那一个
                     lineHeight = max(lineHeight, actualChildHeight)
-                    lineViews.add(child)
+//                    lineViews.add(child)
                 } else {
                     // 在本行不可以放置一个子 View，需要换行
                     if (lineCount == maxLines && mode == MODE_LIMIT_MAX_LINE) {
@@ -117,11 +117,11 @@ class FlowLayout @JvmOverloads constructor(
                     lineCount++
                     totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
                     lineHeights.add(lineHeight)
-                    allLineViews.add(lineViews)
+//                    allLineViews.add(lineViews)
                     lineWidth = actualChildWidth
                     lineHeight = actualChildHeight
-                    lineViews = ArrayList<View>()
-                    lineViews.add(child)
+//                    lineViews = ArrayList<View>()
+//                    lineViews.add(child)
                 }
                 measuredChildCount++
             }
@@ -134,7 +134,7 @@ class FlowLayout @JvmOverloads constructor(
                 lineCount++
                 totalHeight += lineHeight + if (lineCount == 1) 0 else itemVerticalSpacing
                 lineHeights.add(lineHeight)
-                allLineViews.add(lineViews)
+//                allLineViews.add(lineViews)
                 if (measuredChildCount == maxCount && mode == MODE_LIMIT_MAX_COUNT) {
                     break
                 }
@@ -154,48 +154,45 @@ class FlowLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        // 获取行数
-        val lineCount = allLineViews.size
-        Log.d(TAG, "onLayout: lineCount=$lineCount")
         // 子元素的左上角横坐标
         var childLeft = getPaddingLeft()
         // 子元素的左上角纵坐标
         var childTop = getPaddingTop()
-        var nextChildIndex = 0
-        // 遍历行
-        val itemCount = allLineViews.sumOf { it.size }
-        Log.d(TAG, "onLayout: itemCount=$itemCount,childCount=$childCount")
-        outer@for (i in 0 until lineCount) {
-            val lineViews = allLineViews[i]
-            val lineHeight = lineHeights[i]
-            // 遍历一行中的所有子元素
-            for (j in 0 until lineViews.size) {
-                val child = lineViews[j]
+        val childCount = getChildCount()
+        // 行数索引
+        var lineIndex = 0
+        var layoutChildCount = 0
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility != View.GONE) {
                 val lp = child.layoutParams as MarginLayoutParams
                 childLeft += lp.leftMargin
                 val childMeasuredWidth = child.getMeasuredWidth()
                 val childMeasuredHeight = child.getMeasuredHeight()
-                val offsetTop = getOffsetTop(lineHeight, child)
-                // 确定子元素的位置
-                child.layout(childLeft, childTop + lp.topMargin + offsetTop, childLeft + childMeasuredWidth,
-                    childTop + lp.topMargin + offsetTop+ childMeasuredHeight)
-                nextChildIndex = indexOfChild(child)
-                // 更新 childLeft，作为该行下一个子元素的左上角横坐标
-                childLeft += childMeasuredWidth + lp.rightMargin + itemHorizontalSpacing
+                if (childLeft + childMeasuredWidth > getMeasuredWidth()) {
+                    // 需要换行了
+                    // 更新 childTop，作为下一行子元素的左上角纵坐标
+                    childTop += lineHeights[lineIndex] + itemVerticalSpacing
+                    // 更新 childLeft，作为下一行子元素的左上角横坐标
+                    childLeft = getPaddingLeft()
+                    lineIndex++
+                }
+                if (lineIndex + 1 > maxLines && mode == MODE_LIMIT_MAX_LINE) {
+                    child.layout(0,0,0,0)
+                } else if (layoutChildCount >= maxCount && mode == MODE_LIMIT_MAX_COUNT) {
+                    child.layout(0,0,0,0)
+                } else {
+                    val offsetTop = getOffsetTop(lineHeights[lineIndex], child)
+                    // 确定子元素的位置
+                    child.layout(
+                        childLeft, childTop + lp.topMargin + offsetTop, childLeft + childMeasuredWidth,
+                        childTop + lp.topMargin + offsetTop + childMeasuredHeight
+                    )
+                    layoutChildCount++
+                    // 更新 childLeft，作为该行下一个子元素的左上角横坐标
+                    childLeft += childMeasuredWidth + lp.rightMargin + itemHorizontalSpacing
+                }
             }
-            // 更新 childTop，作为下一行子元素的左上角纵坐标
-            childTop += lineHeight + itemVerticalSpacing
-            // 更新 childLeft，作为下一行子元素的左上角横坐标
-            childLeft = getPaddingLeft()
-        }
-
-        val childCount = getChildCount()
-        for (i in nextChildIndex + 1 until childCount) {
-            val child = getChildAt(i)
-            if (child.visibility == View.GONE) {
-                continue
-            }
-            child.layout(0,0,0,0)
         }
     }
 

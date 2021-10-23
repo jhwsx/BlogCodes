@@ -2,6 +2,8 @@ package com.example.lib
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -142,7 +144,12 @@ class FlowLayout @JvmOverloads constructor(
         totalHeight += getPaddingTop() + getPaddingBottom()
         Log.d(TAG, "onMeasure: lineCount=$lineCount")
         val measuredWidth = if (widthMode == MeasureSpec.EXACTLY) widthSize else maxLineWidth
-        val measuredHeight = if (heightMode == MeasureSpec.EXACTLY) heightSize else totalHeight
+        val measuredHeight = when(heightMode) {
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> Math.min(heightSize, totalHeight)
+            else -> totalHeight
+        }
+        Log.d(TAG, "onMeasure: measuredWidth=$measuredWidth, measuredHeight=$measuredHeight")
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
@@ -227,6 +234,51 @@ class FlowLayout @JvmOverloads constructor(
     // 这里重写的目的是解析 margin 属性。
     override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
         return MarginLayoutParams(getContext(), attrs)
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState =  super.onSaveInstanceState()
+        val ss = SavedState(superState)
+        ss.maxCount = maxCount
+        Log.d(TAG, "onSaveInstanceState: maxCount=$maxCount")
+        return ss
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        val ss = state as SavedState
+        super.onRestoreInstanceState(ss.superState)
+        maxCount = ss.maxCount
+        Log.d(TAG, "onRestoreInstanceState: maxCount=$maxCount")
+    }
+
+    class SavedState : BaseSavedState {
+        var maxCount = Int.MAX_VALUE
+
+        constructor(superState: Parcelable?): super(superState)
+
+        constructor(parcel: Parcel) : super(parcel) {
+            maxCount = parcel.readInt()
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            super.writeToParcel(parcel, flags)
+            parcel.writeInt(maxCount)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
+
     }
 
     companion object {

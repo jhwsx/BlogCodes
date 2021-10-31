@@ -1,10 +1,13 @@
 package com.example.lib._2_property_delegation.example1
 
 class Person1 {
-    var name : String = ""
+    var name: String = ""
         set(value) {
             field = value.lowercase().replaceFirstChar { it.uppercase() }
             updateCount++
+        }
+        get() {
+            return field + "-" + field.length
         }
     var updateCount = 0
 }

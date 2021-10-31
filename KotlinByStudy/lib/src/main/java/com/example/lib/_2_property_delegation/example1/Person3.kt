@@ -5,16 +5,25 @@ class Person3 {
         set(value) {
             field = format(value)
         }
+        get() {
+            return getter(field)
+        }
 
     var lastname: String = ""
         set(value) {
             field = format(value)
+        }
+        get() {
+            return getter(field)
         }
     var updateCount = 0
 
     fun format(value: String): String {
         updateCount++
         return value.lowercase().replaceFirstChar { it.uppercase() }
+    }
+    fun getter(value: String): String {
+        return value + "-" + value.length
     }
 }
 

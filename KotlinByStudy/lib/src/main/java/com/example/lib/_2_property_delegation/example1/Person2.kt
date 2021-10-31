@@ -6,11 +6,17 @@ class Person2 {
             field = value.lowercase().replaceFirstChar { it.uppercase() }
             updateCount++
         }
+        get() {
+            return field + "-" + field.length
+        }
 
     var lastname: String = ""
         set(value) {
             field = value.lowercase().replaceFirstChar { it.uppercase() }
             updateCount++
+        }
+        get() {
+            return field + "-" + field.length
         }
     var updateCount = 0
 }

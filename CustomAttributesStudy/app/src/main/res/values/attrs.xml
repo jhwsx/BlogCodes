@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SimpleCustomAttributeView">
+        <attr name="name" format="string" />
+        <attr name="age" format="integer" />
+        <attr name="gender" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomAttributeView">
+        <attr name="cav_id" format="reference" />
+        <attr name="cav_maxLines" format="integer" min="0" />
+        <attr name="cav_minLines" format="integer" min="0" />
+        <attr name="cav_clickable" format="boolean" />
+        <attr name="cav_longClickable" format="boolean" />
+        <attr name="cav_pivotX" format="fraction" />
+        <attr name="cav_pivotY" format="fraction" />
+        <attr name="cav_paddingLeft" format="dimension" />
+        <attr name="cav_paddingRight" format="dimension" />
+    </declare-styleable>
+</resources>

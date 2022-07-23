@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.example.customattributesstudy.SimpleCustomAttributeView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:name="willwaywang6"
+        app:age="18"
+        app:gender="true" />
+
+    <view class="com.example.customattributesstudy.SimpleCustomAttributeView$InnerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.example.customattributesstudy.CustomAttributeView
+        app:cav_id="@id/cav"
+        app:cav_maxLines="@string/lines100"
+        app:cav_minLines="1"
+        app:cav_clickable="@bool/yes"
+        app:cav_longClickable="@integer/max_lines_value"
+        app:cav_pivotX="100%"
+        app:cav_pivotY="@fraction/current_pivotY"
+        app:cav_paddingLeft="16dp"
+        app:cav_paddingRight="@dimen/title_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

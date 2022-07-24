@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">CustomAttributesStudy</string>
     <string name="lines100">100</string>
+    <string name="styled_name">willwaywang6<font color="#f55353">加油</font></string>
+    <string name="author">willwaywang6</string>
 </resources>

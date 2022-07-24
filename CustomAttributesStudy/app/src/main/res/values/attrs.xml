@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="name" format="string" />
+    <attr name="age" format="integer" />
+    <attr name="gender" format="boolean" />
     <declare-styleable name="SimpleCustomAttributeView">
-        <attr name="name" format="string" />
-        <attr name="age" format="integer" />
-        <attr name="gender" format="boolean" />
+        <attr name="name" />
+        <attr name="age" />
+        <attr name="gender" />
     </declare-styleable>
 
     <declare-styleable name="CustomAttributeView">
         <attr name="cav_id" format="reference" />
         <attr name="cav_maxLines" format="integer" min="0" />
         <attr name="cav_minLines" format="integer" min="0" />
+        <attr name="cav_rotationX" format="float" />
+        <attr name="cav_rotationY" format="float" />
         <attr name="cav_clickable" format="boolean" />
         <attr name="cav_longClickable" format="boolean" />
         <attr name="cav_pivotX" format="fraction" />
         <attr name="cav_pivotY" format="fraction" />
         <attr name="cav_paddingLeft" format="dimension" />
         <attr name="cav_paddingRight" format="dimension" />
+        <attr name="cav_tag1" format="string" />
+        <attr name="cav_tag2" format="string" />
+        <attr name="cav_tag3" format="string" />
+        <attr name="cav_backgroundTint" format="color" />
+        <attr name="cav_foregroundTint" format="color" />
+        <attr name="cav_visibility">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+            <enum name="gone" value="2" />
+        </attr>
+        <attr name="cav_textStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
     </declare-styleable>
+
+    <declare-styleable name="StyleCustomAttributeView">
+        <attr name="name" />
+        <attr name="age" />
+        <attr name="gender" />
+    </declare-styleable>
+
+    <attr name="styleCustomAttributeViewStyle" format="reference" />
 </resources>

@@ -4,4 +4,6 @@
     <fraction name="current_pivotY">50%</fraction>
     <item name="image_padding" type="dimen">24dp</item>
     <dimen name="title_padding">16dp</dimen>
+    <item name="rotateY_value" format="float" type="dimen">89.5</item>
+    <dimen name="width">100dp</dimen>
 </resources>

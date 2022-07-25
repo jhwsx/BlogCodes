@@ -21,6 +21,7 @@
 - [Android筑基——深入理解 LayoutInflater.inflate() 方法](https://blog.csdn.net/willway_wang/article/details/107879127)
 - [Android实战——腾讯课堂加载动画效果实现](https://blog.csdn.net/willway_wang/article/details/125244145)
 - [Android实战——一步一步使用自定义 ViewGroup 实现流式布局](https://blog.csdn.net/willway_wang/article/details/120682182)
+- [Android筑基——自定义属性详解](https://blog.csdn.net/willway_wang/article/details/125961300)
 
 ## 《Android开发艺术探索》读书笔记
 

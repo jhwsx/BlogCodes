@@ -64,6 +64,8 @@ class CustomAttributeView(context: Context, attrs: AttributeSet?) : View(context
         val textStyle = typedArray.getInt(R.styleable.CustomAttributeView_cav_textStyle, 0)
         Log.d(TAG, "textStyle = $textStyle")
         typedArray.recycle()
+        postOnAnimation {  }
+        post {  }
     }
 
     companion object {

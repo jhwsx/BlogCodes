@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RefactorDownloadByStatePattern</string>
+    <string name="download">下载</string>
+    <string name="download_pause">暂停</string>
+    <string name="download_cancel">取消</string>
+    <string name="download_resume">恢复</string>
+    <string name="download_success">安装</string>
+</resources>
